@@ -48,7 +48,7 @@ UserSchema.methods.generateAuthToken = function () {
 
     return user.save().then(() => {
         return token;
-    });l
+    });
 };
 
 UserSchema.statics.findByToken = function (token) {
@@ -104,6 +104,16 @@ UserSchema.pre('save', function (next) {
         next();
     }
 });
+
+UserSchema.methods.removeToken = function (token) {
+    var user = this;
+
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    });
+};
 
 var User = mongoose.model('User', UserSchema);
 
